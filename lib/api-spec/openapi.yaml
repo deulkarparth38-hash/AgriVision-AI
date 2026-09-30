@@ -10,6 +10,20 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Account and session operations
+  - name: farm
+    description: Farm profile and dashboard
+  - name: advisory
+    description: AI-generated crop plans and saved advisories
+  - name: diagnosis
+    description: Plant image diagnostics
+  - name: climate
+    description: Local weather and crop risk
+  - name: market
+    description: Market observations and return projections
+  - name: chat
+    description: Context-aware agronomist conversations
 paths:
   /healthz:
     get:
@@ -24,7 +38,393 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /auth/session:
+    get:
+      operationId: getSession
+      tags: [auth]
+      summary: Get the current signed-in user
+      responses:
+        "200":
+          description: Session state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentSession"
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Create an account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterInput"
+      responses:
+        "201":
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentSession"
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Sign in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Signed in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentSession"
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Sign out
+      responses:
+        "200":
+          description: Signed out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+  /profile:
+    get:
+      operationId: getProfile
+      tags: [farm]
+      summary: Get the current user's farm profile
+      responses:
+        "200":
+          description: Farm profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FarmProfile"
+    patch:
+      operationId: updateProfile
+      tags: [farm]
+      summary: Create or update the current user's farm profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FarmProfileInput"
+      responses:
+        "200":
+          description: Updated farm profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FarmProfile"
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [farm]
+      summary: Get counts and recent activity for the current user
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+  /advisories:
+    get:
+      operationId: listAdvisories
+      tags: [advisory]
+      summary: List the current user's saved advisories
+      responses:
+        "200":
+          description: Saved advisories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Advisory"
+    post:
+      operationId: createAdvisory
+      tags: [advisory]
+      summary: Generate and save a crop advisory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdvisoryInput"
+      responses:
+        "201":
+          description: Generated advisory
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Advisory"
+  /advisories/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    get:
+      operationId: getAdvisory
+      tags: [advisory]
+      summary: Get one saved advisory
+      responses:
+        "200":
+          description: Advisory
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Advisory"
+    delete:
+      operationId: deleteAdvisory
+      tags: [advisory]
+      summary: Delete one saved advisory
+      responses:
+        "204":
+          description: Deleted
+  /diagnoses:
+    get:
+      operationId: listDiagnoses
+      tags: [diagnosis]
+      summary: List the current user's saved diagnoses
+      responses:
+        "200":
+          description: Saved diagnoses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Diagnosis"
+    post:
+      operationId: createDiagnosis
+      tags: [diagnosis]
+      summary: Analyze a crop image and save the result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiagnosticInput"
+      responses:
+        "201":
+          description: Diagnostic result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Diagnosis"
+  /diagnoses/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    get:
+      operationId: getDiagnosis
+      tags: [diagnosis]
+      summary: Get one saved diagnosis
+      responses:
+        "200":
+          description: Diagnosis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Diagnosis"
+    delete:
+      operationId: deleteDiagnosis
+      tags: [diagnosis]
+      summary: Delete one saved diagnosis
+      responses:
+        "204":
+          description: Deleted
+  /weather/forecast:
+    get:
+      operationId: getWeatherForecast
+      tags: [climate]
+      summary: Get a seven-day forecast and rule-based crop risks
+      parameters:
+        - name: latitude
+          in: query
+          required: true
+          schema:
+            type: number
+            minimum: -90
+            maximum: 90
+        - name: longitude
+          in: query
+          required: true
+          schema:
+            type: number
+            minimum: -180
+            maximum: 180
+      responses:
+        "200":
+          description: Forecast and risk summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeatherForecast"
+  /market/summary:
+    get:
+      operationId: getMarketSummary
+      tags: [market]
+      summary: Summarize user-entered market observations
+      parameters:
+        - name: crop
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: region
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Price trend based only on recorded observations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketSummary"
+  /market/observations:
+    get:
+      operationId: listMarketObservations
+      tags: [market]
+      summary: List the current user's market observations
+      parameters:
+        - name: crop
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: region
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Market observations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MarketObservation"
+    post:
+      operationId: createMarketObservation
+      tags: [market]
+      summary: Record a price observed by the user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketObservationInput"
+      responses:
+        "201":
+          description: Recorded market price
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketObservation"
+  /market/observations/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    delete:
+      operationId: deleteMarketObservation
+      tags: [market]
+      summary: Delete one market observation
+      responses:
+        "204":
+          description: Deleted
+  /conversations:
+    get:
+      operationId: listConversations
+      tags: [chat]
+      summary: List the current user's conversations
+      responses:
+        "200":
+          description: Conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Conversation"
+    post:
+      operationId: createConversation
+      tags: [chat]
+      summary: Start a new agronomist conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConversationInput"
+      responses:
+        "201":
+          description: Conversation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Conversation"
+  /conversations/{id}:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    get:
+      operationId: getConversation
+      tags: [chat]
+      summary: Get conversation and message history
+      responses:
+        "200":
+          description: Conversation with messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConversationDetail"
+    delete:
+      operationId: deleteConversation
+      tags: [chat]
+      summary: Delete one conversation
+      responses:
+        "204":
+          description: Deleted
+  /conversations/{id}/messages:
+    parameters:
+      - $ref: "#/components/parameters/Id"
+    post:
+      operationId: sendConversationMessage
+      tags: [chat]
+      summary: Send a message and receive an AI response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatInput"
+      responses:
+        "200":
+          description: User and assistant messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatExchange"
 components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +433,336 @@ components:
           type: string
       required:
         - status
+    Success:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required: [success]
+    UserRole:
+      type: string
+      enum: [farmer, agronomist, extension_worker]
+    SessionUser:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        email: { type: string, format: email }
+        role: { $ref: "#/components/schemas/UserRole" }
+      required: [id, name, email, role]
+    CurrentSession:
+      type: object
+      properties:
+        authenticated: { type: boolean }
+        user:
+          anyOf:
+            - $ref: "#/components/schemas/SessionUser"
+            - type: "null"
+      required: [authenticated, user]
+    RegisterInput:
+      type: object
+      properties:
+        name: { type: string, minLength: 1, maxLength: 100 }
+        email: { type: string, format: email, maxLength: 254 }
+        password: { type: string, minLength: 10, maxLength: 128 }
+        role: { $ref: "#/components/schemas/UserRole" }
+      required: [name, email, password, role]
+    LoginInput:
+      type: object
+      properties:
+        email: { type: string, format: email, maxLength: 254 }
+        password: { type: string, minLength: 1, maxLength: 128 }
+      required: [email, password]
+    FarmProfile:
+      type: object
+      properties:
+        farmName: { type: string }
+        region: { type: string }
+        country: { type: string }
+        crops:
+          type: array
+          items: { type: string }
+        areaHa: { type: ["number", "null"] }
+        latitude: { type: ["number", "null"] }
+        longitude: { type: ["number", "null"] }
+        soilType: { type: ["string", "null"] }
+        soilPH: { type: ["number", "null"] }
+        nitrogen: { type: ["number", "null"] }
+        phosphorus: { type: ["number", "null"] }
+        potassium: { type: ["number", "null"] }
+        organicCarbonPct: { type: ["number", "null"] }
+        irrigation: { type: ["string", "null"] }
+        budgetPerHa: { type: ["number", "null"] }
+        currency: { type: string }
+      required: [farmName, region, country, crops, areaHa, latitude, longitude, soilType, soilPH, nitrogen, phosphorus, potassium, organicCarbonPct, irrigation, budgetPerHa, currency]
+    FarmProfileInput:
+      type: object
+      properties:
+        farmName: { type: string, maxLength: 120 }
+        region: { type: string, maxLength: 120 }
+        country: { type: string, maxLength: 120 }
+        crops:
+          type: array
+          items: { type: string, maxLength: 60 }
+        areaHa: { type: ["number", "null"], minimum: 0 }
+        latitude: { type: ["number", "null"], minimum: -90, maximum: 90 }
+        longitude: { type: ["number", "null"], minimum: -180, maximum: 180 }
+        soilType: { type: ["string", "null"], maxLength: 100 }
+        soilPH: { type: ["number", "null"], minimum: 0, maximum: 14 }
+        nitrogen: { type: ["number", "null"], minimum: 0 }
+        phosphorus: { type: ["number", "null"], minimum: 0 }
+        potassium: { type: ["number", "null"], minimum: 0 }
+        organicCarbonPct: { type: ["number", "null"], minimum: 0, maximum: 100 }
+        irrigation: { type: ["string", "null"], maxLength: 120 }
+        budgetPerHa: { type: ["number", "null"], minimum: 0 }
+        currency: { type: string, minLength: 3, maxLength: 3 }
+      required: [farmName, region, country, crops, currency]
+    DashboardSummary:
+      type: object
+      properties:
+        advisoryCount: { type: integer }
+        diagnosisCount: { type: integer }
+        conversationCount: { type: integer }
+        observationCount: { type: integer }
+        recentAdvisories:
+          type: array
+          items: { $ref: "#/components/schemas/Advisory" }
+        recentDiagnoses:
+          type: array
+          items: { $ref: "#/components/schemas/Diagnosis" }
+      required: [advisoryCount, diagnosisCount, conversationCount, observationCount, recentAdvisories, recentDiagnoses]
+    AdvisoryInput:
+      type: object
+      properties:
+        crop: { type: string, minLength: 1, maxLength: 80 }
+        region: { type: string, minLength: 1, maxLength: 160 }
+        country: { type: string, minLength: 1, maxLength: 120 }
+        season: { type: string, minLength: 1, maxLength: 80 }
+        areaHa: { type: number, minimum: 0 }
+        soilType: { type: ["string", "null"] }
+        soilPH: { type: ["number", "null"], minimum: 0, maximum: 14 }
+        nitrogen: { type: ["number", "null"], minimum: 0 }
+        phosphorus: { type: ["number", "null"], minimum: 0 }
+        potassium: { type: ["number", "null"], minimum: 0 }
+        organicCarbonPct: { type: ["number", "null"], minimum: 0, maximum: 100 }
+        irrigation: { type: string }
+        budgetPerHa: { type: ["number", "null"], minimum: 0 }
+        currency: { type: string, minLength: 3, maxLength: 3 }
+      required: [crop, region, country, season, areaHa, soilType, soilPH, nitrogen, phosphorus, potassium, organicCarbonPct, irrigation, budgetPerHa, currency]
+    PlanStep:
+      type: object
+      properties:
+        stage: { type: string }
+        timing: { type: string }
+        action: { type: string }
+        materials: { type: string }
+        amount: { type: string }
+        caution: { type: string }
+      required: [stage, timing, action, materials, amount, caution]
+    NutrientStep:
+      type: object
+      properties:
+        nutrient: { type: string }
+        recommendation: { type: string }
+        timing: { type: string }
+        basis: { type: string }
+      required: [nutrient, recommendation, timing, basis]
+    RiskItem:
+      type: object
+      properties:
+        concern: { type: string }
+        likelihood: { type: string, enum: [low, moderate, high] }
+        signals: { type: string }
+        prevention: { type: string }
+      required: [concern, likelihood, signals, prevention]
+    ROIProjection:
+      type: object
+      properties:
+        estimatedYield: { type: number }
+        yieldUnit: { type: string }
+        expectedRevenue: { type: number }
+        estimatedCosts: { type: number }
+        estimatedNet: { type: number }
+        breakEvenPrice: { type: number }
+        assumptions:
+          type: array
+          items: { type: string }
+      required: [estimatedYield, yieldUnit, expectedRevenue, estimatedCosts, estimatedNet, breakEvenPrice, assumptions]
+    AdvisoryReport:
+      type: object
+      properties:
+        overview: { type: string }
+        cropPlan:
+          type: array
+          items: { $ref: "#/components/schemas/PlanStep" }
+        nutrientPlan:
+          type: array
+          items: { $ref: "#/components/schemas/NutrientStep" }
+        diseaseRisks:
+          type: array
+          items: { $ref: "#/components/schemas/RiskItem" }
+        roi: { $ref: "#/components/schemas/ROIProjection" }
+        confidence: { type: string, enum: [low, moderate, high] }
+        assumptions:
+          type: array
+          items: { type: string }
+        disclaimer: { type: string }
+      required: [overview, cropPlan, nutrientPlan, diseaseRisks, roi, confidence, assumptions, disclaimer]
+    Advisory:
+      type: object
+      properties:
+        id: { type: string }
+        crop: { type: string }
+        region: { type: string }
+        season: { type: string }
+        createdAt: { type: string, format: date-time }
+        report: { $ref: "#/components/schemas/AdvisoryReport" }
+      required: [id, crop, region, season, createdAt, report]
+    DiagnosticInput:
+      type: object
+      properties:
+        crop: { type: ["string", "null"], maxLength: 80 }
+        region: { type: ["string", "null"], maxLength: 160 }
+        symptoms: { type: ["string", "null"], maxLength: 1000 }
+        mimeType: { type: string, enum: [image/jpeg, image/png, image/webp] }
+        imageData: { type: string, minLength: 1 }
+      required: [mimeType, imageData]
+    DiagnosisAction:
+      type: object
+      properties:
+        type: { type: string, enum: [cultural, biological, chemical, monitoring] }
+        action: { type: string }
+        timing: { type: string }
+        caution: { type: string }
+      required: [type, action, timing, caution]
+    DiagnosisReport:
+      type: object
+      properties:
+        likelyIssue: { type: string }
+        confidence: { type: string, enum: [low, moderate, high] }
+        severity: { type: integer, minimum: 1, maximum: 5 }
+        observations:
+          type: array
+          items: { type: string }
+        possibleCauses:
+          type: array
+          items: { type: string }
+        actions:
+          type: array
+          items: { $ref: "#/components/schemas/DiagnosisAction" }
+        escalation: { type: string }
+        disclaimer: { type: string }
+      required: [likelyIssue, confidence, severity, observations, possibleCauses, actions, escalation, disclaimer]
+    Diagnosis:
+      type: object
+      properties:
+        id: { type: string }
+        crop: { type: ["string", "null"] }
+        region: { type: ["string", "null"] }
+        createdAt: { type: string, format: date-time }
+        report: { $ref: "#/components/schemas/DiagnosisReport" }
+      required: [id, crop, region, createdAt, report]
+    WeatherDay:
+      type: object
+      properties:
+        date: { type: string, format: date }
+        minC: { type: number }
+        maxC: { type: number }
+        precipitationMm: { type: number }
+        precipitationProbability: { type: integer }
+        windKph: { type: number }
+      required: [date, minC, maxC, precipitationMm, precipitationProbability, windKph]
+    ClimateRisk:
+      type: object
+      properties:
+        type: { type: string, enum: [heat, frost, drought, heavy_rain, wind] }
+        level: { type: string, enum: [low, moderate, high] }
+        detail: { type: string }
+      required: [type, level, detail]
+    WeatherForecast:
+      type: object
+      properties:
+        locationLabel: { type: string }
+        updatedAt: { type: string, format: date-time }
+        source: { type: string }
+        days:
+          type: array
+          items: { $ref: "#/components/schemas/WeatherDay" }
+        risks:
+          type: array
+          items: { $ref: "#/components/schemas/ClimateRisk" }
+      required: [locationLabel, updatedAt, source, days, risks]
+    MarketObservationInput:
+      type: object
+      properties:
+        crop: { type: string, minLength: 1, maxLength: 80 }
+        region: { type: string, minLength: 1, maxLength: 160 }
+        market: { type: string, minLength: 1, maxLength: 160 }
+        unit: { type: string, minLength: 1, maxLength: 40 }
+        currency: { type: string, minLength: 3, maxLength: 3 }
+        price: { type: number, minimum: 0 }
+        observedAt: { type: string, format: date }
+        source: { type: ["string", "null"], maxLength: 160 }
+      required: [crop, region, market, unit, currency, price, observedAt, source]
+    MarketObservation:
+      allOf:
+        - $ref: "#/components/schemas/MarketObservationInput"
+        - type: object
+          properties:
+            id: { type: string }
+            createdAt: { type: string, format: date-time }
+          required: [id, createdAt]
+    MarketSummary:
+      type: object
+      properties:
+        crop: { type: string }
+        region: { type: ["string", "null"] }
+        currency: { type: ["string", "null"] }
+        unit: { type: ["string", "null"] }
+        latestPrice: { type: ["number", "null"] }
+        changePct: { type: ["number", "null"] }
+        observations:
+          type: array
+          items: { $ref: "#/components/schemas/MarketObservation" }
+      required: [crop, region, currency, unit, latestPrice, changePct, observations]
+    ConversationInput:
+      type: object
+      properties:
+        title: { type: string, minLength: 1, maxLength: 120 }
+      required: [title]
+    Conversation:
+      type: object
+      properties:
+        id: { type: string }
+        title: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      required: [id, title, createdAt, updatedAt]
+    ChatInput:
+      type: object
+      properties:
+        message: { type: string, minLength: 1, maxLength: 5000 }
+      required: [message]
+    ChatMessage:
+      type: object
+      properties:
+        id: { type: string }
+        role: { type: string, enum: [user, assistant] }
+        content: { type: string }
+        createdAt: { type: string, format: date-time }
+      required: [id, role, content, createdAt]
+    ConversationDetail:
+      type: object
+      properties:
+        conversation: { $ref: "#/components/schemas/Conversation" }
+        messages:
+          type: array
+          items: { $ref: "#/components/schemas/ChatMessage" }
+      required: [conversation, messages]
+    ChatExchange:
+      type: object
+      properties:
+        userMessage: { $ref: "#/components/schemas/ChatMessage" }
+        assistantMessage: { $ref: "#/components/schemas/ChatMessage" }
+      required: [userMessage, assistantMessage]
 
