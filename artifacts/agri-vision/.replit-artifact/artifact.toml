@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "AgriVision AI"
+description = "A field-ready agriculture advisory app for farmers and agronomists: generate crop plans from soil and farm conditions, diagnose plant issues from photos, review local weather risks and markets, chat with an agronomist assistant, and save reports."
+version = "1.0.0"
+id = "artifacts/agri-vision"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19813
+
+[services.development]
+run = "pnpm --filter @workspace/agri-vision run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/agri-vision", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/agri-vision/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19813"
+BASE_PATH = "/"

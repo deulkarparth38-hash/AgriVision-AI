@@ -1,0 +1,531 @@
+Here is the complete, production-grade Master Prompt generated directly for your AI coding agent. You can copy and paste this entire block directly into Cursor, Claude Code, Replit Agent, or Bolt.
+
+---
+
+# MASTER PROMPT: AI-POWERED AGRICULTURE CROP ADVISORY ASSISTANT
+
+You are an expert Principal Full-Stack Engineer, AI Systems Architect, and Lead Prompt Engineer. Your task is to build a complete, production-grade, end-to-end full-stack web application: **"AgriVision AI" — An AI-Powered Agriculture Crop Advisory Assistant**.
+
+You must generate all source files, database migrations, configuration files, backend services, AI integrations, and UI components without skipping steps, leaving `// TODO` comments, using mock stubs, or writing incomplete code blocks. Every single file must be fully written and production-ready.
+
+---
+
+## 1. HEADER & SYSTEM PERSONA ROLE
+
+* **Role:** Lead Full-Stack & AI Systems Architect.
+* **Target Application:** AgriVision AI — Production-Grade Crop Advisory & Agronomy Intelligence Platform.
+* **Standards:** Enterprise-grade security, fully typed TypeScript end-to-end, deterministic AI JSON outputs with Zod schemas, robust error handling, responsive mobile-first UI, and performant serverless/database operations.
+
+---
+
+## 2. CORE MISSION DIRECTIVE
+
+Build a multi-tenant-ready, hyper-localized AI Crop Advisory platform designed to empower farmers, agronomists, and agricultural extension workers. The system ingests farm contextual parameters (soil profile, location coordinates, historical crop cycles, budget, irrigation infrastructure, real-time weather, and uploaded crop defect images) and executes multi-stage Gemini 2.0 multi-modal pipelines to generate actionable, agronomic-grade crop plans, disease diagnoses, risk assessments, and market intelligence reports.
+
+---
+
+## 3. PRODUCT GOAL
+
+Provide smallholder and large-scale farmers with enterprise-level agronomic advisory using state-of-the-art Generative AI. The platform minimizes crop yield loss, optimizes fertilizer and pesticide usage, predicts climate risks, and maximizes financial return on investment (ROI) by delivering clear, localized, step-by-step guidance in simple, customizable formats.
+
+---
+
+## 4. MANDATORY FEATURES
+
+1. **Interactive Agronomic Advisory Generator:**
+* Multi-step form capturing field parameters, soil test values ($pH$, $N$, $P$, $K$, organic carbon), micro-climate, water availability, and financial constraints.
+* Real-time synthesis into structured seasonal crop plans.
+
+
+2. **AI Vision Pest & Disease Diagnostic Studio:**
+* Multi-modal image analysis tool for leaf, stem, and root diagnostics.
+* Immediate output detailing disease severity index, causal pathogens, biological/chemical remedies, and prevention protocols.
+
+
+3. **Geo-Spatial Climate Risk Radar:**
+* Automated local weather integration providing 7-day risk forecasts for drought, frost, pest outbreaks, and heat stress.
+
+
+4. **Market & ROI Intelligence Engine:**
+* Harvest schedule optimization paired with real-time market price trend analysis and estimated financial yield projections.
+
+
+5. **Interactive AI Agronomist Chatbot (AgriBot):**
+* Context-aware chat assistant backed by session history and farm profile data for real-time natural language agronomic Q&A.
+
+
+6. **Advisory Archiving & PDF Export:**
+* Persistent storage of advisories with full PDF report generation capabilities for offline field use.
+
+
+
+---
+
+## 5. TECHNOLOGY REQUIREMENTS
+
+* **Frontend:** React.js (v18+ with TypeScript), Tailwind CSS, Lucide React (Icons), Recharts (Data Visualization), Framer Motion (Animations), `@react-pdf/renderer` or `jsPDF` (Report Export).
+* **Backend:** Node.js with Express.js (TypeScript, ESM).
+* **Database & ORM:** Replit PostgreSQL / Standard PostgreSQL, Drizzle ORM (or Prisma ORM), `@neondatabase/serverless` connection pooler.
+* **AI & SDK:** `@google/genai` (Official Google Gen AI SDK utilizing `gemini-2.0-flash`), `zod` (Strict Schema Validation), `zod-to-json-schema`.
+* **Authentication & Middleware:** Express session/JWT, bcrypt password hashing, CORS, Helmet, Rate Limiting.
+* **Validation & Utilities:** Zod for API payload validation, Axios for external API fetches.
+
+---
+
+## 6. APPLICATION PAGES (ROUTES)
+
+### Client-Side Routes (React Router v6)
+
+* `/` — Landing Page (Hero, Value Proposition, Feature Showcase, Testimonials, CTA).
+* `/auth` — Sign In / Sign Up Modal / Page with role selection (Farmer, Agronomist, Extension Worker).
+* `/dashboard` — Primary Dashboard (Overview of active fields, recent advisories, quick actions, climate alerts).
+* `/advisory/new` — Multi-Step Advisory Generator Form.
+* `/advisory/:id` — Detailed Advisory View (Interactive tabs: Crop Plan, Nutrient Management, Disease Risk, ROI Projection).
+* `/diagnose` — AI Vision Plant Doctor (Drag-and-Drop Image Diagnostic Studio).
+* `/market` — Market Price Trends & Crop Profitability Calculator.
+* `/chat` — Interactive AgriBot Chat Assistant.
+* `/history` — Archived Advisories & Historical Field Performance.
+
+---
+
+## 7. USER FLOW
+
+```
+[Landing Page] ➔ [Authentication] ➔ [Dashboard Hub]
+                                        │
+     ┌───────────────────┬──────────────┼──────────────┬──────────────────┐
+     ▼                   ▼              ▼              ▼                  ▼
+[Advisory Engine]  [Vision Studio] [Market Radar] [AgriBot Chat]  [History & Export]
+     │                   │              │              │                  │
+     ├─ Input Params     ├─ Upload Photo├─ Select Crop ├─ Query Context   ├─ View Past
+     ├─ Call Gemini AI   ├─ Multi-modal ├─ Fetch Trends├─ Stream Response ├─ Filter/Search
+     └─ Render Plan      └─ Output Severity└─ ROI Calc └─ Session Memory  └─ Download PDF
+
+```
+
+---
+
+## 8. TARGET DOMAINS & CATEGORIZATION
+
+* **Crops:** Cereals (Rice, Wheat, Maize), Pulses (Chickpea, Pigeon Pea), Oilseeds (Soybean, Mustard), Cash Crops (Cotton, Sugarcane), Vegetables (Tomato, Potato, Onion), Fruits (Mango, Citrus, Banana).
+* **Soil Types:** Alluvial, Black (Vertisols), Red, Laterite, Arid/Sandy, Saline/Alkaline.
+* **Farming Approaches:** Organic, Integrated Nutrient Management (INM), Precision Farming, Hydroponics, Regenerative Agriculture.
+
+---
+
+## 9. FORM & ADVISORY CONFIGURATION
+
+The Advisory Setup Form captures:
+
+1. **Field Metadata:** Field Name, Area Size (Acres/Hectares), Geo-Coordinates/Region.
+2. **Soil Health Metrics:** Soil Type, $pH$ Level, Nitrogen ($N$), Phosphorus ($P$), Potassium ($K$) levels (PPM or High/Medium/Low), Organic Carbon (%).
+3. **Water & Irrigation:** Source (Rainfed, Canal, Borewell, Drip), Water Availability Status (Deficit, Adequate, Abundant).
+4. **Current Season & Budget:** Target Planting Month, Budget Limit per Acre, Crop Preferences/Exclusions.
+
+---
+
+## 10. DATABASE SCHEMA (PRODUCTION SQL FOR POSTGRESQL)
+
+Execute and initialize the following PostgreSQL database schema:
+
+```sql
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Users Table
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    role VARCHAR(30) DEFAULT 'farmer' CHECK (role IN ('farmer', 'agronomist', 'extension_worker', 'admin')),
+    region VARCHAR(100),
+    preferred_language VARCHAR(10) DEFAULT 'en',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Farms / Fields Table
+CREATE TABLE fields (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    field_name VARCHAR(100) NOT NULL,
+    area_acres NUMERIC(8, 2) NOT NULL,
+    soil_type VARCHAR(50) NOT NULL,
+    ph_level NUMERIC(3, 2),
+    nitrogen_level VARCHAR(20),
+    phosphorus_level VARCHAR(20),
+    potassium_level VARCHAR(20),
+    irrigation_source VARCHAR(50) NOT NULL,
+    latitude NUMERIC(10, 7),
+    longitude NUMERIC(10, 7),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Crop Advisories Table
+CREATE TABLE advisories (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    field_id UUID REFERENCES fields(id) ON DELETE SET NULL,
+    target_crop VARCHAR(100) NOT NULL,
+    season VARCHAR(50) NOT NULL,
+    advisory_json JSONB NOT NULL,
+    status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'archived', 'completed')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Diagnostic Reports Table
+CREATE TABLE diagnostic_reports (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    image_url TEXT NOT NULL,
+    diagnosis_json JSONB NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Chat Sessions & Messages Table
+CREATE TABLE chat_sessions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(150) DEFAULT 'New Conversation',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE chat_messages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    session_id UUID NOT NULL REFERENCES chat_sessions(id) ON DELETE CASCADE,
+    sender VARCHAR(10) CHECK (sender IN ('user', 'model')),
+    message TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes for performance
+CREATE INDEX idx_fields_user_id ON fields(user_id);
+CREATE INDEX idx_advisories_user_id ON advisories(user_id);
+CREATE INDEX idx_diagnostics_user_id ON diagnostic_reports(user_id);
+CREATE INDEX idx_chat_messages_session_id ON chat_messages(session_id);
+
+```
+
+---
+
+## 11. ROW LEVEL SECURITY (RLS) / DATA ISOLATION RULES
+
+Ensure all queries enforce strict user isolation:
+
+* Users can only SELECT, INSERT, UPDATE, or DELETE records where `user_id = req.user.id`.
+* Backend Express routes must apply an `authenticateToken` middleware that verifies JWT/Session data and injects `req.user.id` into all ORM/database queries.
+
+---
+
+## 12. BACKEND API ROUTES
+
+Implement the following RESTful endpoints in Express.js:
+
+* **Authentication:**
+* `POST /api/auth/register` — Create user account.
+* `POST /api/auth/login` — Authenticate and yield JWT token/session cookie.
+* `GET /api/auth/me` — Return active user details.
+
+
+* **Fields Management:**
+* `POST /api/fields` — Create a new field profile.
+* `GET /api/fields` — List all fields for logged-in user.
+
+
+* **Advisory Engine:**
+* `POST /api/advisory/generate` — Validate input, call Gemini 2.0 SDK, store, and return structured JSON advisory.
+* `GET /api/advisory` — Get user's advisory history.
+* `GET /api/advisory/:id` — Get specific advisory detailed report.
+
+
+* **Vision Diagnostics:**
+* `POST /api/diagnose` — Process multi-modal image buffer + parameters through Gemini 2.0 Vision, record, and return diagnosis JSON.
+
+
+* **Chat Assistant:**
+* `POST /api/chat/session` — Create chat session.
+* `POST /api/chat/message` — Send message and stream/fetch Gemini response.
+
+
+* **Market & Weather Services:**
+* `GET /api/weather?lat=&lon=` — Proxy to weather service or generate localized risk analysis via Gemini.
+* `GET /api/market/prices?crop=` — Retrieve current commodity market insights.
+
+
+
+---
+
+## 13. GEMINI SDK SETUP & SERVER-SIDE SECURITY
+
+Initialize the official `@google/genai` SDK on the backend only. Never expose API keys to the client.
+
+```typescript
+// server/services/gemini.ts
+import { GoogleGenAI } from '@google/genai';
+
+if (!process.env.GEMINI_API_KEY) {
+  throw new Error("Missing GEMINI_API_KEY environment variable.");
+}
+
+export const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
+
+export const GEMINI_MODEL = 'gemini-2.0-flash';
+
+```
+
+---
+
+## 14. AI SYSTEM PROMPT
+
+The following System Prompt must be configured inside all Gemini SDK requests:
+
+```
+You are AgriVision AI, an expert Senior Agronomist, Plant Pathologist, and Agricultural Economist. Your mission is to provide accurate, science-backed, economically viable, and environmentally sustainable agricultural advisories to farmers.
+
+Guidelines:
+1. Always base recommendations on proven agronomic science, integrated pest management (IPM), and balanced plant nutrition.
+2. Structure all responses strictly according to the requested JSON Schemas without adding markdown code blocks (```json) around the response when structured outputs are configured.
+3. Be realistic regarding costs, localized climate vulnerabilities, and practical farming constraints.
+4. If image quality is too poor to identify a plant pathogen, state uncertainty clearly in the output metrics.
+
+```
+
+---
+
+## 15. DETAILED AI PROMPTS (WITH REQUIRED JSON SCHEMAS)
+
+### A. Crop Plan Advisory Generator Prompt
+
+* **Prompt:** "Analyze the following farm context and generate a comprehensive seasonal advisory plan. Context: Field Area: {area} Acres, Soil Type: {soilType}, pH: {ph}, NPK: {nitrogen}-{phosphorus}-{potassium}, Irrigation: {irrigation}, Region/Location: {location}, Target Planting Date: {plantingDate}, Budget Level: {budget}."
+* **Schema Definition (Zod & Object Schema):**
+
+```typescript
+import { z } from 'zod';
+
+export const CropAdvisorySchema = z.object({
+  recommendedCrops: z.array(z.object({
+    cropName: z.string(),
+    suitabilityScore: z.number().min(0).max(100),
+    rationale: z.string(),
+    estimatedYieldPerAcre: z.string(),
+    estimatedNetProfitPerAcre: z.string(),
+  })),
+  nutrientManagementPlan: z.object({
+    basalApplication: z.array(z.string()),
+    topDressingSchedule: z.array(z.object({
+      stage: z.string(),
+      fertilizer: z.string(),
+      dosagePerAcre: z.string(),
+      applicationMethod: z.string(),
+    })),
+    micronutrientDeficiencies: z.array(z.string()),
+  }),
+  irrigationSchedule: z.object({
+    frequencyDays: z.number(),
+    criticalGrowthStages: z.array(z.string()),
+    waterConservationTips: z.array(z.string()),
+  }),
+  pestAndDiseasePrevention: z.array(z.object({
+    threatName: z.string(),
+    riskLevel: z.enum(['Low', 'Medium', 'High', 'Critical']),
+    preventativeAction: z.string(),
+  })),
+  harvestAndMarketStrategy: z.object({
+    optimalHarvestWindow: z.string(),
+    postHarvestHandling: z.string(),
+    targetMarketChannels: z.array(z.string()),
+  }),
+});
+
+```
+
+### B. Plant Disease Diagnosis Studio Prompt
+
+* **Prompt:** "Analyze this plant image along with the provided symptoms description: '{symptoms}'. Identify any disease, pest infestation, or nutrient deficiency."
+* **Schema Definition:**
+
+```typescript
+export const PlantDiagnosisSchema = z.object({
+  plantIdentified: z.string(),
+  healthStatus: z.enum(['Healthy', 'Diseased', 'Pest Damage', 'Nutrient Deficiency', 'Unknown']),
+  diagnosisName: z.string(),
+  confidenceScore: z.number().min(0).max(100),
+  causalAgent: z.string(),
+  severityIndex: z.enum(['Minor', 'Moderate', 'Severe', 'Critical']),
+  symptomsObserved: z.array(z.string()),
+  treatmentPlan: z.object({
+    immediateOrganicRemedies: z.array(z.string()),
+    chemicalInterventions: z.array(z.string()),
+    preventativeCulturalPractices: z.array(z.string()),
+  }),
+});
+
+```
+
+---
+
+## 16. ZOD VALIDATION REQUIREMENTS
+
+* All Express backend controllers MUST validate incoming HTTP body payloads using Zod schemas before passing arguments to ORMs or AI services.
+* AI response outputs from Gemini SDK MUST be parsed with `.parse()` or `.safeParse()` using the Zod schemas above to guarantee front-end type safety.
+
+---
+
+## 17. FRONTEND COMPONENTS LIST
+
+Implement clean, modular React components using Tailwind CSS and Lucide React icons:
+
+1. `Navbar.tsx` — Responsive navigation header with user profile dropdown and status indicator.
+2. `Sidebar.tsx` — Dashboard quick-link panel with active route highlighting.
+3. `AdvisoryForm.tsx` — Multi-step wizard with visual sliders for pH/NPK and radio buttons for irrigation types.
+4. `AdvisoryCard.tsx` — Summary view of generated advisories with color-coded risk tags.
+5. `AdvisoryDetailView.tsx` — Tabbed analytics view featuring yield charts via Recharts.
+6. `DiagnosticUploader.tsx` — Drag-and-drop image dropping area with preview canvas and camera integration.
+7. `DiagnosticResultCard.tsx` — Visual diagnostic summary report with severity indicator bars.
+8. `WeatherWidget.tsx` — 7-day microclimate overview with agricultural advisory callouts.
+9. `MarketChart.tsx` — Historical vs predicted commodity pricing line graphs via Recharts.
+10. `AgriChat.tsx` — Real-time chat box with auto-scrolling, typing indicators, and quick suggestion chips.
+11. `PDFExportButton.tsx` — One-click trigger converting advisory JSON into formatted PDF documents.
+
+---
+
+## 18. SECURITY REQUIREMENTS
+
+* Password storage using `bcryptjs` with salt rounds = 10.
+* JWT authentication tokens stored in HttpOnly secure cookies or sanitized local storage headers.
+* Express security middleware: `helmet()`, `cors({ origin: true, credentials: true })`, and `express-rate-limit` (100 requests per 15 minutes per IP).
+* Client-side sanitization of user-submitted text inside Chat and Form inputs.
+* Explicit size limits on image uploads (Maximum 5MB; supported formats: JPEG, PNG, WEBP).
+
+---
+
+## 19. ENVIRONMENT VARIABLES TEMPLATE
+
+Create a `.env.example` file:
+
+```env
+# Server Config
+PORT=5000
+NODE_ENV=development
+
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/agrivision_db
+
+# Authentication
+JWT_SECRET=super-secret-jwt-key-change-in-production
+SESSION_SECRET=super-secret-session-key
+
+# AI Services
+GEMINI_API_KEY=your_gemini_api_key_here
+
+```
+
+---
+
+## 20. SUGGESTED FOLDER STRUCTURE
+
+```
+agrivision-ai/
+├── client/
+│   ├── index.html
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── AdvisoryCard.tsx
+│   │   │   ├── AdvisoryDetailView.tsx
+│   │   │   ├── AdvisoryForm.tsx
+│   │   │   ├── AgriChat.tsx
+│   │   │   ├── DiagnosticResultCard.tsx
+│   │   │   ├── DiagnosticUploader.tsx
+│   │   │   ├── MarketChart.tsx
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── PDFExportButton.tsx
+│   │   │   ├── Sidebar.tsx
+│   │   │   └── WeatherWidget.tsx
+│   │   ├── pages/
+│   │   │   ├── AdvisoryPage.tsx
+│   │   │   ├── AuthPage.tsx
+│   │   │   ├── ChatPage.tsx
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── DiagnosePage.tsx
+│   │   │   ├── HistoryPage.tsx
+│   │   │   ├── LandingPage.tsx
+│   │   │   └── MarketPage.tsx
+│   │   ├── services/
+│   │   │   └── api.ts
+│   │   ├── types/
+│   │   │   └── index.ts
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── index.css
+│   ├── tailwind.config.js
+│   └── tsconfig.json
+├── server/
+│   ├── config/
+│   │   └── db.ts
+│   ├── controllers/
+│   │   ├── advisoryController.ts
+│   │   ├── authController.ts
+│   │   ├── chatController.ts
+│   │   └── diagnoseController.ts
+│   ├── middleware/
+│   │   ├── authMiddleware.ts
+│   │   └── errorMiddleware.ts
+│   ├── routes/
+│   │   ├── advisoryRoutes.ts
+│   │   ├── authRoutes.ts
+│   │   ├── chatRoutes.ts
+│   │   └── diagnoseRoutes.ts
+│   ├── services/
+│   │   └── gemini.ts
+│   ├── utils/
+│   │   └── schemas.ts
+│   └── index.ts
+├── .env.example
+├── package.json
+└── README.md
+
+```
+
+---
+
+## 21. IMPLEMENTATION PHASES
+
+* **Phase 1: Database & Backend Setup**
+* Initialize Node.js, Express, TypeScript, database connections, schemas, and authentication middleware.
+
+
+* **Phase 2: Gemini 2.0 Integration & Schemas**
+* Construct backend AI services using `@google/genai` with Zod structured output validation for advisory generation and vision diagnostics.
+
+
+* **Phase 3: Frontend Architecture & UI Components**
+* Build React component library, navigation shell, state management, and API integration layers using Axios/TanStack Query.
+
+
+* **Phase 4: Multi-modal Vision Studio & Chat Assistant**
+* Implement base64/buffer image conversion pipeline for disease diagnosis and integrate streaming/session chat with AgriBot.
+
+
+* **Phase 5: Refinement, PDF Export & Testing**
+* Integrate Recharts for market/yield trends, implement PDF report generator, enforce error boundaries, and test user isolation end-to-end.
+
+
+
+---
+
+## 22. ACCEPTANCE CRITERIA
+
+1. **Functional Completeness:** All 6 core modules (Advisory Form, Advisory View, Vision Doctor, Market Hub, Chat Assistant, and PDF Exporter) are fully operational without dead buttons or mock handlers.
+2. **Deterministic AI Outputs:** Every Gemini response follows strict JSON schemas validated end-to-end via Zod.
+3. **Multi-Modal Capabilities:** The Diagnostic Studio accurately processes uploaded crop images and returns complete disease severity ratings and remedies.
+4. **Data Isolation:** PostgreSQL schema + JWT authentication prevents cross-tenant data exposure.
+5. **UI Excellence:** Fully responsive, polished Tailwind CSS interface tailored for high readability in field conditions.
+
+---
+
+## 23. FINAL INSTRUCTION TO CODING AGENT
+
+> **EXECUTION DIRECTIVE:** Begin implementation immediately starting with Phase 1. Write ALL files completely with full executable code. Do NOT use placeholder functions, omitted boilerplate, or truncated code snippets. Build the complete project now.
